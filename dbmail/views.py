@@ -49,7 +49,7 @@ def mail_read_tracker(request, encrypted):
     if defaults.TRACK_ENABLE and defaults.ENABLE_LOGGING:
         from dbmail.tasks import mail_track
 
-        req = {k: v for k, v in request.META.items()
+        req = {k: v for k, v in list(request.META.items())
                if k.startswith('HTTP_') or k.startswith('REMOTE')}
         if defaults.ENABLE_CELERY is True:
             mail_track.delay(args=[req, encrypted], retry=1, max_retries=2)

@@ -86,7 +86,7 @@ class MailFromEmail(models.Model):
 
     @property
     def get_mail_from(self):
-        return u'%s <%s>' % (self.name, self.email)
+        return '%s <%s>' % (self.name, self.email)
 
     def _clean_template_cache(self):
         MailTemplate.clean_cache(from_email=self)
@@ -421,7 +421,7 @@ class Signal(models.Model):
     model = models.ForeignKey(
         'contenttypes.ContentType', verbose_name=_('Model'))
     signal = models.CharField(
-        _('Signal'), choices=zip(SIGNALS, SIGNALS),
+        _('Signal'), choices=list(zip(SIGNALS, SIGNALS)),
         max_length=15, default='post_save')
     template = models.ForeignKey(MailTemplate, verbose_name=_('Template'))
     group = models.ForeignKey(
@@ -502,7 +502,7 @@ class SignalDeferredDispatch(models.Model):
 
     def run_task(self):
         if self.done is False:
-            import tasks
+            from . import tasks
 
             tasks.deferred_signal.apply_async(
                 args=pickle.loads(self.args),
@@ -633,7 +633,7 @@ class MailLogTrack(models.Model):
             try:
                 g = GeoIP()
                 info = g.city(self.ip) or dict()
-                for (k, v) in info.items():
+                for (k, v) in list(info.items()):
                     setattr(self, 'ip_%s' % k, v)
             except GeoIPException:
                 pass

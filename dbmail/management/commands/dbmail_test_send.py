@@ -30,4 +30,4 @@ class Command(BaseCommand):
         send_test_msg(
             options['pk'], options['email'], use_celery=not options['celery']
         )
-        print "Done. Message was sent."
+        print("Done. Message was sent.")

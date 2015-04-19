@@ -19,7 +19,7 @@ def app_installed(app):
 
 def celery_supported():
     try:
-        import tasks
+        from . import tasks
 
         if not app_installed('djcelery'):
             raise ImportError
@@ -40,7 +40,7 @@ def send_db_mail(slug, recipient, *args, **kwargs):
     use_celery = ENABLE_CELERY and _use_celery
 
     if celery_supported() and use_celery is True:
-        import tasks
+        from . import tasks
 
         template = MailTemplate.get_template(slug=slug)
         max_retries = kwargs.get('max_retries', None)

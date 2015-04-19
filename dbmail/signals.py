@@ -91,7 +91,7 @@ class SignalReceiver(object):
         self._kwargs['signal_pk'] = self.signal.pk
 
         if SIGNAL_DEFERRED_DISPATCHER == 'celery':
-            import tasks
+            from . import tasks
 
             tasks.deferred_signal.apply_async(
                 args=[self.sender], kwargs=self._kwargs,
@@ -136,7 +136,7 @@ def signal_receiver(sender, **kwargs):
         kwargs.pop('signal')
 
     if celery_supported():
-        import tasks
+        from . import tasks
 
         tasks.signal_receiver.apply_async(
             args=[sender], kwargs=kwargs,
