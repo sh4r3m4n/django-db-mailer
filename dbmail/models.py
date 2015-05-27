@@ -9,6 +9,7 @@ import re
 from django.utils.translation import ugettext_lazy as _
 from django.utils.html import strip_tags
 from django.utils.timezone import now
+from django.utils.encoding import python_2_unicode_compatible
 from django.core.cache import cache
 from django.conf import settings
 from django.db import models
@@ -35,7 +36,8 @@ class MailCategory(models.Model):
     created = models.DateTimeField(_('Created'), auto_now_add=True)
     updated = models.DateTimeField(_('Updated'), auto_now=True)
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -67,7 +69,8 @@ class MailFromEmailCredential(models.Model):
         super(MailFromEmailCredential, self).save(*args, **kwargs)
         self._clean_cache()
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return '%s/%s' % (self.username, self.host)
 
     class Meta:
@@ -110,7 +113,8 @@ class MailFromEmail(models.Model):
         super(MailFromEmail, self).save(*args, **kwargs)
         self._clean_template_cache()
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -135,7 +139,8 @@ class MailBcc(models.Model):
         self.__clean_cache()
         super(MailBcc, self).delete(using)
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return self.email
 
     class Meta:
@@ -237,7 +242,8 @@ class MailTemplate(models.Model):
         self._clean_cache()
         super(MailTemplate, self).delete(using)
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -262,7 +268,8 @@ class MailFile(models.Model):
         self._clean_cache()
         super(MailFile, self).delete(using)
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -273,7 +280,8 @@ class MailFile(models.Model):
 class MailLogException(models.Model):
     name = models.CharField(_('Exception'), max_length=150, unique=True)
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -322,7 +330,8 @@ class MailLog(models.Model):
         date = now() - datetime.timedelta(days=days)
         cls.objects.filter(created__lte=date).delete()
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return self.template.name
 
     class Meta:
@@ -339,7 +348,8 @@ class MailLogEmail(models.Model):
         ('to', 'TO'),
     ), max_length=3)
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return self.email
 
     class Meta:
@@ -378,7 +388,8 @@ class MailGroup(models.Model):
         self.clean_cache()
         super(MailGroup, self).delete(using)
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -400,7 +411,8 @@ class MailGroupEmail(models.Model):
         self.group.clean_cache()
         super(MailGroupEmail, self).delete(using)
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return self.email
 
     class Meta:
@@ -470,7 +482,8 @@ class Signal(models.Model):
                 model=self.model, model_pk=pk, signal=self
             )
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -484,7 +497,8 @@ class SignalLog(models.Model):
     signal = models.ForeignKey(Signal)
     created = models.DateTimeField(_('Created'), auto_now_add=True)
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return self.signal.name
 
     class Meta:
@@ -547,7 +561,8 @@ class ApiKey(models.Model):
         self._clean_cache()
         super(ApiKey, self).delete(using)
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -599,7 +614,8 @@ class MailLogTrack(models.Model):
     created = models.DateTimeField(_('Created'), auto_now_add=True)
     updated = models.DateTimeField(_('Updated'), auto_now=True)
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return self.mail_log.template.name
 
     class Meta:
